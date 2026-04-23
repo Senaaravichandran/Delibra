@@ -1,0 +1,6 @@
+groq
+openai
+python-dotenv
+streamlit
+pandas
+httpx
