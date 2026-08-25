@@ -31,6 +31,9 @@ class Settings(BaseSettings):
 
     groq_api_key: str | None = Field(default=None, validation_alias="GROQ_API_KEY")
     nvidia_api_key: str | None = Field(default=None, validation_alias="NVIDIA_API_KEY")
+    nvidia_openai_api_key: str | None = Field(
+        default=None, validation_alias="NVIDIA_OPENAI_API_KEY"
+    )
     groq_model: str = "llama-3.3-70b-versatile"
     nvidia_model: str = "nvidia/llama-3.1-nemotron-nano-8b-v1"
     gpt_oss_model: str = "openai/gpt-oss-20b"
@@ -42,7 +45,13 @@ class Settings(BaseSettings):
             return [origin.strip() for origin in value.split(",") if origin.strip()]
         return value
 
-    @field_validator("api_key", "groq_api_key", "nvidia_api_key", mode="before")
+    @field_validator(
+        "api_key",
+        "groq_api_key",
+        "nvidia_api_key",
+        "nvidia_openai_api_key",
+        mode="before",
+    )
     @classmethod
     def empty_string_is_none(cls, value: str | None) -> str | None:
         return value or None
