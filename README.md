@@ -1,196 +1,255 @@
-# ⚖️ Jurex - Multi-LLM Debate Arena
+<div align="center">
 
-> **Same prompt → three AI models debate each other → a fourth LLM judges the winner.**  
-> Built to explore how different language models reason, argue, and compare on identical questions.
+<img src="docs/hero.svg" alt="VerdictForge — Intelligence, tested in the open" width="100%">
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.x-red?logo=streamlit&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-LLaMA%203-orange)
-![NVIDIA NIM](https://img.shields.io/badge/NVIDIA%20NIM-Nemotron%20%7C%20GPT--OSS-76b900?logo=nvidia&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green)
+<br>
+
+[![CI](https://github.com/Senaaravichandran/Jurex/actions/workflows/ci.yml/badge.svg)](https://github.com/Senaaravichandran/Jurex/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-async-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](Dockerfile)
+[![License: MIT](https://img.shields.io/badge/License-MIT-f97316.svg)](LICENSE)
+
+**A production-minded arena where multiple language models reason in parallel, deliberate over anonymous peer drafts, and face a blind structured judge.**
+
+[Quick start](#-quick-start) · [How it works](#-how-a-verdict-is-forged) · [API](#-api) · [Deploy](#-deployment) · [Contribute](CONTRIBUTING.md)
+
+</div>
 
 ---
 
-## 🧠 What Is Jurex?
+## Why VerdictForge?
 
-Jurex is an **AI debate arena** — you type one question and three state-of-the-art LLMs answer it independently. A fourth model then **judges and ranks** their responses using a structured rubric, outputting scores, strengths, weaknesses, and a verdict for each. ELO ratings accumulate across debates to track which model performs best over time.
+One model can sound confident and still be wrong. VerdictForge turns a question into an inspectable competition: independent answers, an optional synthesis round, anonymous evaluation, durable evidence, and ratings that evolve with every result.
 
-**The name** comes from *"Jury"* + *"Apex"* — the apex jury of AI models.
+The name combines **verdict** with **forge**—a place where raw responses are tested under pressure and shaped into stronger decisions.
 
----
+### What makes it different
 
-## 🏗️ Architecture
+- **Parallel by default** — 2–4 candidates run concurrently behind bounded provider clients.
+- **Real deliberation** — models can revise their answers using anonymized peer drafts.
+- **Blind evaluation** — the judge sees `candidate-A`, not a model brand.
+- **Validated verdicts** — strict schemas, full-candidate checks, consecutive ranks, and one repair attempt.
+- **Graceful partial failure** — one provider can fail without collapsing the entire council.
+- **Fair multiplayer Elo** — every ranking becomes zero-sum pairwise outcomes calculated from one pre-debate snapshot.
+- **Durable history** — debates, answers, timings, verdicts, and ratings survive restarts in SQLite.
+- **Complete product surface** — responsive frontend, versioned API, exports, OpenAPI, security headers, tests, CI, and Docker.
 
+## How a verdict is forged
+
+```mermaid
+flowchart LR
+    Q[User question] --> V{Validate & select}
+    V -->|concurrent| A[Candidate A]
+    V -->|concurrent| B[Candidate B]
+    V -->|concurrent| C[Candidate C]
+    A & B & C --> D{Mode}
+    D -->|Direct| J[Blind judge]
+    D -->|Deliberate| R[Anonymous peer refinement]
+    R --> J
+    J --> S[Schema validation]
+    S -->|invalid| F[One repair attempt]
+    S -->|valid| E[Zero-sum Elo]
+    F --> E
+    E --> DB[(SQLite archive)]
+    DB --> UI[Results · History · Export]
 ```
-User Question
-      │
-      ▼
-┌─────────────────────────────────────────┐
-│               debate.py                 │
-│                                         │
-│  llama-3    ──► Groq API               │
-│  nemotron   ──► NVIDIA NIM             │
-│  gpt-oss    ──► NVIDIA NIM             │
-└──────────────────┬──────────────────────┘
-                   │  3 answers
-                   ▼
-┌─────────────────────────────────────────┐
-│               judge.py                  │
-│                                         │
-│  llama-3 (Groq) evaluates all 3        │
-│  → ranks by correctness, clarity,      │
-│    completeness, conciseness           │
-└──────────────────┬──────────────────────┘
-                   │  JSON verdict
-                   ▼
-┌─────────────────────────────────────────┐
-│               elo.py                    │
-│  ELO ratings update based on rank      │
-│  (same formula as competitive chess)   │
-└─────────────────────────────────────────┘
-                   │
-                   ▼
-           Streamlit UI (app.py)
-```
 
----
+The judge uses a weighted rubric: **correctness 45%**, **completeness 25%**, **clarity 20%**, and **concision 10%**. Candidate text is explicitly treated as untrusted data to reduce instruction-injection risk during evaluation.
 
-## 🤖 Models Used
+## Feature map
 
-| Alias | Model ID | Provider |
-|---|---|---|
-| `llama-3` | `llama-3.3-70b-versatile` | 🟢 Groq |
-| `nemotron` | `nvidia/llama-3.1-nemotron-nano-8b-v1` | 🔵 NVIDIA NIM |
-| `gpt-oss` | `openai/gpt-oss-20b` | 🔴 NVIDIA NIM |
-| **Judge** | `llama-3.3-70b-versatile` | 🟢 Groq |
+| Layer | Included |
+|---|---|
+| Arena | Async parallel calls, concurrency bounds, timeouts, exponential retry, partial results |
+| Deliberation | Direct and two-round modes, anonymous peer context, standalone final answers |
+| Judging | Brand-blind candidates, JSON mode, strict validation, safe repair, weighted rubric |
+| Ratings | Multiplayer pairwise Elo, order-independent deltas, durable wins/debate counts |
+| Backend | FastAPI, background debate jobs, polling, pagination, search, exports, OpenAPI |
+| Frontend | Responsive dark interface, live status/stats, model council, verdict cards, archive |
+| Persistence | SQLite WAL, transactional debate + rating writes, indexed history |
+| Hardening | Optional API key, constant-time comparison, rate limit, CSP, request IDs, safe errors |
+| Operations | Non-root Docker image, health check, persistent volume, CI across Python 3.11/3.13 |
 
----
+## Quick start
 
-## ✨ Features
+### 1. Clone and install
 
-- 🗣️ **Multi-model debate** — Three LLMs answer the same question simultaneously
-- 🧑‍⚖️ **Structured judging** — The judge scores each answer on correctness, clarity, completeness, and conciseness
-- 📊 **ELO leaderboard** — Chess-style ratings track model performance across debates
-- 🌀 **Streaming responses** — NVIDIA models stream output in real-time
-- 🔒 **Secure config** — API keys loaded from `.env`, never hardcoded
-- 📜 **Debate history** — Every debate is saved and reviewable in-session
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
 ```bash
-git clone https://github.com/Senaaravichandran/jurex.git
-cd jurex
-```
+git clone https://github.com/Senaaravichandran/Jurex.git
+cd Jurex
 
-### 2. Create a virtual environment
-```bash
-python -m venv venv
+python -m venv .venv
 
 # Windows
-venv\Scripts\activate
+.venv\Scripts\activate
 
 # macOS / Linux
-source venv/bin/activate
+source .venv/bin/activate
+
+python -m pip install -r requirements.txt
 ```
 
-### 3. Install dependencies
-```bash
-pip install -r requirements.txt
-```
+### 2. Configure providers
 
-### 4. Set up API keys
 ```bash
+# Windows PowerShell
+Copy-Item .env.example .env
+
+# macOS / Linux
 cp .env.example .env
 ```
-Then open `.env` and fill in your keys:
 
-| Key | Where to get it |
-|---|---|
-| `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) |
-| `NVIDIA_API_KEY` | [build.nvidia.com](https://build.nvidia.com) |
-| `NVIDIA_OPENAI_API_KEY` | [build.nvidia.com](https://build.nvidia.com) |
+Add credentials to `.env`. At least **two available candidate models** are required.
 
-### 5. Run the app
+| Variable | Enables | Provider console |
+|---|---|---|
+| `GROQ_API_KEY` | Qwen 3.6 27B and GPT-OSS 120B candidates; GPT-OSS is the default judge | [Groq Console](https://console.groq.com/) |
+| `NVIDIA_API_KEY` | Nemotron 3.5 Lightning and GPT-OSS 20B | [NVIDIA Build](https://build.nvidia.com/) |
+| `NVIDIA_OPENAI_API_KEY` | Backward-compatible GPT-OSS credential | [NVIDIA Build](https://build.nvidia.com/) |
+
+Model routes are environment-driven. Change IDs in `.env` when a provider retires or replaces a model—no source edit required.
+
+### 3. Run
+
 ```bash
-streamlit run app.py
+python -m uvicorn verdictforge.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
----
+Open [http://localhost:8000](http://localhost:8000). Interactive API documentation is at [http://localhost:8000/api/docs](http://localhost:8000/api/docs).
 
-## 📁 Project Structure
+## API
 
-```
-jurex/
-├── app.py            # Streamlit UI — main entry point
-├── debate.py         # Multi-provider model routing + debate logic
-├── judge.py          # Judge prompt engineering + evaluation
-├── elo.py            # ELO rating system
-├── parse_judge.py    # Robust JSON extraction from LLM output
-├── requirements.txt  # Python dependencies
-├── .env.example      # API key template
-├── .gitignore
-│
-└── test_groq.py           # Groq API sanity check
-└── test_nvidia_llama.py   # NVIDIA Nemotron sanity check
-└── test_nvidia_openai.py  # NVIDIA GPT-OSS sanity check
+Every debate is an asynchronous job. Creation returns `202 Accepted`; poll the returned ID until its status becomes `completed`, `partial`, or `failed`.
+
+```bash
+curl -X POST http://localhost:8000/api/v1/debates \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "When should a team choose event sourcing over CRUD?",
+    "model_ids": ["qwen-3.6-27b", "nemotron-3.5-lightning", "gpt-oss-20b"],
+    "mode": "deliberate"
+  }'
 ```
 
----
+```bash
+curl http://localhost:8000/api/v1/debates/<debate-id>
+```
 
-## 🛠️ Tech Stack
+| Method | Route | Purpose |
+|---|---|---|
+| `GET` | `/api/v1/health` | Runtime, database, and provider readiness |
+| `GET` | `/api/v1/models` | Public model catalog and availability |
+| `POST` | `/api/v1/debates` | Queue a validated debate |
+| `GET` | `/api/v1/debates` | Paginated, searchable archive |
+| `GET` | `/api/v1/debates/{id}` | Full answers, verdict, usage, timings, ratings |
+| `GET` | `/api/v1/debates/{id}/export` | Download Markdown or JSON evidence |
+| `GET` | `/api/v1/stats` | Leaderboard and arena totals |
 
-- **[Streamlit](https://streamlit.io/)** — Interactive web UI with zero frontend boilerplate
-- **[Groq](https://groq.com/)** — Ultra-fast LLaMA 3 inference (used for debater + judge)
-- **[NVIDIA NIM](https://build.nvidia.com/)** — Access to Nemotron and GPT-OSS via OpenAI-compatible API
-- **[OpenAI Python SDK](https://github.com/openai/openai-python)** — Used as a universal client for NVIDIA NIM endpoints
-- **[python-dotenv](https://github.com/theskumar/python-dotenv)** — Secure environment variable management
+If `VERDICTFORGE_API_KEY` is set, include it on creation requests:
 
----
+```bash
+-H "X-API-Key: your-deployment-secret"
+```
 
-## 💡 How the Judge Works
+The browser UI reveals an access-key field automatically on protected deployments and stores the key only in that tab's session storage.
 
-The judge (LLaMA 3 via Groq) receives all three answers and evaluates them on a rubric:
+## Configuration
 
-1. **Correctness** — Is the answer factually accurate?
-2. **Clarity** — Is it well-structured and easy to follow?
-3. **Completeness** — Does it cover all important aspects?
-4. **Conciseness** — No fluff, appropriately scoped?
+| Setting | Default | Notes |
+|---|---:|---|
+| `VERDICTFORGE_ENVIRONMENT` | `development` | Use `production` in deployed environments |
+| `VERDICTFORGE_DATABASE_PATH` | `data/verdictforge.db` | Parent directory is created automatically |
+| `VERDICTFORGE_REQUEST_TIMEOUT_SECONDS` | `60` | Per-provider request ceiling, 5–300 seconds |
+| `VERDICTFORGE_MAX_CONCURRENT_MODELS` | `4` | Process-local concurrency bound |
+| `VERDICTFORGE_MAX_QUESTION_LENGTH` | `12000` | Applied at API and service boundaries |
+| `VERDICTFORGE_RATE_LIMIT_PER_MINUTE` | `10` | Debate creations per client and process |
+| `VERDICTFORGE_API_KEY` | empty | Optional protection for write requests |
+| `VERDICTFORGE_JUDGE_MODEL_ID` | `gpt-oss-120b` | Falls back to the first available model |
+| `VERDICTFORGE_CORS_ORIGINS` | local app origins | Comma-separated exact origins |
 
-It outputs structured JSON with ranks, scores (0–100), strengths, weaknesses, and a one-sentence verdict per model.
+See [.env.example](.env.example) for the complete configuration surface.
 
----
+## Architecture
 
-## 📈 ELO Rating System
+```text
+verdictforge/
+├── api.py          # Versioned HTTP routes and export formats
+├── arena.py        # Concurrent answer and refinement rounds
+├── catalog.py      # Public model registry and availability
+├── config.py       # Typed environment configuration
+├── judging.py      # Blind evaluation, parsing, and repair
+├── main.py         # Application factory and lifecycle
+├── middleware.py   # Auth, rate limit, telemetry, browser headers
+├── providers.py    # Async OpenAI-compatible provider adapters
+├── ratings.py      # Pure multiplayer Elo calculations
+├── repository.py   # Transactional async SQLite repository
+├── schemas.py      # Strict domain and API contracts
+├── service.py      # Debate lifecycle orchestration
+└── web/             # Framework-free responsive frontend
+```
 
-Borrowed from competitive chess — models start at **1500 ELO**. After each debate:
-- The 1st-place model gains points from the 2nd-place model
-- The 2nd-place model gains points from the 3rd-place model
-- The magnitude of change depends on how surprising the outcome was
+The provider boundary uses the OpenAI-compatible protocol, so another compatible endpoint can be added by extending the catalog and registry without changing the arena, judge, persistence, or UI contracts.
 
-This lets you track which model consistently produces better answers over time.
+## Quality and testing
 
----
+The suite never spends provider credits. Fakes exercise concurrency, partial failure, blind identity restoration, judge validation, Elo invariants, persistence, API behavior, authentication, and static delivery.
 
-## 🔮 Future Ideas
+```bash
+python -m pip install -r requirements-dev.txt
+python -m ruff check .
+python -m ruff format --check .
+python -m pytest --cov=verdictforge --cov-report=term-missing
+node --check verdictforge/web/app.js
+```
 
-- [ ] Add more models (Gemini, Claude, Mistral)
-- [ ] Persist ELO ratings to a database across sessions
-- [ ] Export debate history as PDF / Markdown
-- [ ] Side-by-side diff view of answers
-- [ ] Graph ELO trends over time
+Current local verification: **19 tests passing**, **79% aggregate backend coverage**, and a successful live three-provider verdict. GitHub Actions repeats lint, format, and coverage runs on Python 3.11 and 3.13.
 
----
+## Deployment
 
-## 👤 Author
+### Docker Compose
 
-**Sena** — built as a personal project to compare frontier LLMs in a structured, reproducible way.  
-Feel free to open issues or PRs!
+```bash
+cp .env.example .env
+# Add provider keys to .env
+docker compose up --build -d
+docker compose ps
+```
 
----
+The container runs as an unprivileged user, exposes port `8000`, performs an HTTP health check, and stores SQLite state in the `verdictforge-data` volume.
 
-## 📄 License
+### Production boundary
 
-MIT — see [LICENSE](LICENSE) for details.
+This repository is deployment-ready for a **single application instance**. Debate jobs and rate limits are process-local, while SQLite is the durable store; the supplied container therefore uses one worker. For horizontal scale, replace background tasks with a durable queue, move persistence to PostgreSQL, and enforce limits at the gateway. The service, schema, and provider boundaries are intentionally separated to make that migration straightforward.
+
+## Security notes
+
+- Secrets load from environment variables and `.env` is ignored by Git.
+- Provider exception details are logged server-side but reduced to safe client messages.
+- Candidate content is delimited and treated as untrusted during refinement and judging.
+- Authentication uses constant-time secret comparison when enabled.
+- Responses include CSP, anti-framing, MIME-sniffing, referrer, and permissions policies.
+- Request IDs make user-visible failures traceable without exposing credentials.
+
+Please report vulnerabilities privately using the guidance in [SECURITY.md](SECURITY.md).
+
+## Roadmap
+
+- Server-sent event progress and token streaming
+- PostgreSQL repository and durable distributed worker
+- Pluggable Anthropic, Gemini, Mistral, and local Ollama adapters
+- Human voting blended with judge confidence
+- Evaluation datasets, rubric templates, and longitudinal charts
+- Organization accounts and role-scoped API keys
+
+## Contributing
+
+Thoughtful issues and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and quality bar.
+
+Built by **Sena**. Released under the [MIT License](LICENSE).
+
+<div align="center">
+
+**Ask better questions. Demand inspectable answers.**
+
+</div>

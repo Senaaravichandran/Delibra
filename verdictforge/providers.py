@@ -1,6 +1,7 @@
 """Resilient asynchronous adapters for OpenAI-compatible model providers."""
 
 import logging
+import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 from time import perf_counter
@@ -26,6 +27,9 @@ from verdictforge.config import Settings
 from verdictforge.schemas import ModelSpec, Usage
 
 logger = logging.getLogger(__name__)
+REASONING_BLOCK = re.compile(
+    r"<(think|analysis|reasoning)>.*?</\1>", flags=re.IGNORECASE | re.DOTALL
+)
 
 
 class ProviderError(RuntimeError):
@@ -137,6 +141,7 @@ class ProviderClient:
 
         choice = response.choices[0] if response.choices else None
         content = choice.message.content if choice and choice.message.content else ""
+        content = strip_hidden_reasoning(content)
         if not content.strip():
             raise ProviderError("The model returned an empty response.", model_id=spec.id)
 
@@ -214,3 +219,9 @@ class ProviderRegistry:
     async def close(self) -> None:
         for client in self._clients.values():
             await client.close()
+
+
+def strip_hidden_reasoning(content: str) -> str:
+    """Remove provider-emitted private reasoning blocks from public answers."""
+
+    return REASONING_BLOCK.sub("", content).strip()

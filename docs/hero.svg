@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">VerdictForge</title>
+  <desc id="desc">An animated diagram showing three AI models converging on one blind verdict.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0f1422"/><stop offset=".55" stop-color="#070a12"/><stop offset="1" stop-color="#11101a"/>
+    </linearGradient>
+    <linearGradient id="ember" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffb08f"/><stop offset=".5" stop-color="#ff7846"/><stop offset="1" stop-color="#ff4d1f"/>
+    </linearGradient>
+    <linearGradient id="wire" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#38bdf8" stop-opacity=".15"/><stop offset=".5" stop-color="#ff7846"/><stop offset="1" stop-color="#ff7846" stop-opacity=".12"/>
+    </linearGradient>
+    <radialGradient id="glow"><stop stop-color="#ff6b35" stop-opacity=".25"/><stop offset="1" stop-color="#ff6b35" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0v32" fill="none" stroke="#fff" stroke-opacity=".035"/></pattern>
+    <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity=".5"/></filter>
+    <style>
+      .flow{stroke-dasharray:7 11;animation:dash 1.6s linear infinite}.pulse{transform-box:fill-box;transform-origin:center;animation:pulse 2.4s ease-in-out infinite}.pulse.two{animation-delay:.45s}.pulse.three{animation-delay:.9s}.scan{animation:scan 4s ease-in-out infinite}.spark{animation:spark 2.2s ease-in-out infinite}.spark.b{animation-delay:.65s}.spark.c{animation-delay:1.2s}@keyframes dash{to{stroke-dashoffset:-36}}@keyframes pulse{0%,100%{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}@keyframes scan{0%,100%{transform:translateX(-30px);opacity:0}15%,80%{opacity:.85}50%{transform:translateX(150px)}}@keyframes spark{0%,100%{opacity:.15}45%,60%{opacity:1}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+    </style>
+  </defs>
+  <rect width="1200" height="430" rx="24" fill="url(#background)"/>
+  <rect width="1200" height="430" rx="24" fill="url(#grid)"/>
+  <ellipse cx="975" cy="205" rx="250" ry="210" fill="url(#glow)" filter="url(#soft)"/>
+  <path d="M0 1h1200" stroke="#fff" stroke-opacity=".12"/><path d="M0 429h1200" stroke="#ff7846" stroke-opacity=".18"/>
+
+  <g transform="translate(70 73)">
+    <g transform="skewX(-8)"><rect x="0" y="42" width="25" height="58" rx="3" fill="url(#ember)"/><rect x="34" y="0" width="26" height="100" rx="3" fill="url(#ember)"/><rect x="69" y="25" width="25" height="75" rx="3" fill="url(#ember)"/></g>
+    <text x="0" y="151" fill="#f6f7fb" font-family="Inter,Segoe UI,sans-serif" font-size="47" font-weight="760" letter-spacing="-2">Verdict<tspan fill="#ff8a59">Forge</tspan></text>
+    <text x="2" y="185" fill="#9298a8" font-family="Inter,Segoe UI,sans-serif" font-size="14" letter-spacing="3">INTELLIGENCE, TESTED IN THE OPEN</text>
+    <text x="2" y="242" fill="#d7dae2" font-family="Inter,Segoe UI,sans-serif" font-size="17">Parallel reasoning · Peer deliberation · Blind judging</text>
+    <g transform="translate(2 270)"><rect width="185" height="38" rx="5" fill="#ff7846"/><text x="20" y="24" fill="#160903" font-family="Inter,Segoe UI,sans-serif" font-size="12" font-weight="700" letter-spacing="1">FORGE A VERDICT  →</text></g>
+  </g>
+
+  <g transform="translate(610 44)" font-family="Inter,Segoe UI,sans-serif" filter="url(#shadow)">
+    <path d="M78 64C230 64 218 171 365 171M78 171H365M78 278C230 278 218 171 365 171" fill="none" stroke="url(#wire)" stroke-width="2" class="flow"/>
+    <g class="pulse"><circle cx="70" cy="64" r="38" fill="#101827" stroke="#38bdf8" stroke-opacity=".48"/><circle cx="70" cy="64" r="26" fill="#38bdf8" fill-opacity=".08"/><text x="70" y="68" fill="#8bdbfa" text-anchor="middle" font-size="10" letter-spacing="1.5">MODEL 01</text></g>
+    <g class="pulse two"><circle cx="70" cy="171" r="38" fill="#151923" stroke="#76b900" stroke-opacity=".48"/><circle cx="70" cy="171" r="26" fill="#76b900" fill-opacity=".08"/><text x="70" y="175" fill="#a8dc62" text-anchor="middle" font-size="10" letter-spacing="1.5">MODEL 02</text></g>
+    <g class="pulse three"><circle cx="70" cy="278" r="38" fill="#19151f" stroke="#c084fc" stroke-opacity=".48"/><circle cx="70" cy="278" r="26" fill="#c084fc" fill-opacity=".08"/><text x="70" y="282" fill="#d6a8fb" text-anchor="middle" font-size="10" letter-spacing="1.5">MODEL 03</text></g>
+    <g transform="translate(365 116)"><rect width="180" height="110" rx="12" fill="#14131c" stroke="#ff7846" stroke-opacity=".58"/><rect x="12" y="12" width="156" height="86" rx="7" fill="#ff7846" fill-opacity=".055"/><text x="90" y="43" fill="#ff9b72" text-anchor="middle" font-size="9" letter-spacing="3">BLIND JUDGE</text><text x="90" y="72" fill="#f6f7fb" text-anchor="middle" font-size="20" font-weight="730">VERDICT</text><path d="M45 87h90" stroke="#ff7846" stroke-opacity=".38"/><circle cx="45" cy="87" r="3" fill="#ff7846" class="spark"/><circle cx="90" cy="87" r="3" fill="#ff7846" class="spark b"/><circle cx="135" cy="87" r="3" fill="#ff7846" class="spark c"/></g>
+    <rect x="383" y="121" width="3" height="100" fill="#fff" fill-opacity=".22" class="scan"/>
+    <text x="70" y="343" fill="#626a7b" text-anchor="middle" font-size="9" letter-spacing="2">ANONYMOUS CANDIDATES</text><text x="455" y="259" fill="#626a7b" text-anchor="middle" font-size="9" letter-spacing="2">STRUCTURED EVIDENCE</text>
+  </g>
+</svg>

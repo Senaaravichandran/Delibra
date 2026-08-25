@@ -36,10 +36,11 @@ class Settings(BaseSettings):
     nvidia_openai_api_key: str | None = Field(
         default=None, validation_alias="NVIDIA_OPENAI_API_KEY"
     )
-    groq_model: str = "llama-3.3-70b-versatile"
-    nvidia_model: str = "nvidia/llama-3.1-nemotron-nano-8b-v1"
+    groq_model: str = "qwen/qwen3.6-27b"
+    groq_judge_model: str = "openai/gpt-oss-120b"
+    nvidia_model: str = "nvidia/nemotron-3.5-lightning-30b-a3b"
     gpt_oss_model: str = "openai/gpt-oss-20b"
-    judge_model_id: str = "llama-3.3-70b"
+    judge_model_id: str = "gpt-oss-120b"
 
     @field_validator("cors_origins", mode="before")
     @classmethod
