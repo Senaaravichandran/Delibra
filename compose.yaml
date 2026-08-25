@@ -1,0 +1,17 @@
+services:
+  verdictforge:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      VERDICTFORGE_ENVIRONMENT: production
+      VERDICTFORGE_DATABASE_PATH: /app/data/verdictforge.db
+    volumes:
+      - verdictforge-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  verdictforge-data:
+

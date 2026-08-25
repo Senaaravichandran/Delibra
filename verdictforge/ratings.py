@@ -66,6 +66,5 @@ def initialize_ratings(model_ids: list[str]) -> dict[str, RatingSnapshot]:
     """Create stable starting ratings for newly configured models."""
 
     return {
-        model_id: RatingSnapshot(model_id=model_id, rating=DEFAULT_RATING)
-        for model_id in model_ids
+        model_id: RatingSnapshot(model_id=model_id, rating=DEFAULT_RATING) for model_id in model_ids
     }

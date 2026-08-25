@@ -94,4 +94,3 @@ class DebateService:
     def _finish_timing(debate: DebateRecord, started: float) -> None:
         debate.completed_at = datetime.now(UTC)
         debate.duration_ms = round((perf_counter() - started) * 1000)
-

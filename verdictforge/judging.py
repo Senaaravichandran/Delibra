@@ -47,9 +47,7 @@ class _BlindJudgment(BaseModel):
 
     @field_validator("rankings")
     @classmethod
-    def validate_unique_consecutive_ranks(
-        cls, value: list[_BlindRanking]
-    ) -> list[_BlindRanking]:
+    def validate_unique_consecutive_ranks(cls, value: list[_BlindRanking]) -> list[_BlindRanking]:
         ids = [entry.candidate_id for entry in value]
         ranks = sorted(entry.rank for entry in value)
         if len(ids) != len(set(ids)):
@@ -75,8 +73,7 @@ class BlindJudge:
         shuffled = successful.copy()
         secrets.SystemRandom().shuffle(shuffled)
         blind_to_model = {
-            f"candidate-{chr(65 + index)}": answer.model_id
-            for index, answer in enumerate(shuffled)
+            f"candidate-{chr(65 + index)}": answer.model_id for index, answer in enumerate(shuffled)
         }
 
         candidates = []
