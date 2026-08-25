@@ -4,7 +4,7 @@
 
 <br>
 
-[![CI](https://github.com/Senaaravichandran/Jurex/actions/workflows/ci.yml/badge.svg)](https://github.com/Senaaravichandran/Jurex/actions/workflows/ci.yml)
+[![CI](https://github.com/Senaaravichandran/Delibra/actions/workflows/ci.yml/badge.svg)](https://github.com/Senaaravichandran/Delibra/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-async-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](Dockerfile)
@@ -76,8 +76,8 @@ The judge uses a weighted rubric: **correctness 45%**, **completeness 25%**, **c
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/Senaaravichandran/Jurex.git
-cd Jurex
+git clone https://github.com/Senaaravichandran/Delibra.git
+cd Delibra
 
 python -m venv .venv
 
