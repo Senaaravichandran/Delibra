@@ -1,6 +1,7 @@
-groq
-openai
-python-dotenv
-streamlit
-pandas
-httpx
+fastapi>=0.115
+groq>=0.18
+httpx>=0.28
+openai>=1.65
+pydantic-settings>=2.7
+tenacity>=9.0
+uvicorn[standard]>=0.34

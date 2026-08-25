@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "verdictforge"
+version = "2.0.0"
+description = "A production-ready, multi-model AI deliberation and evaluation arena."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Sena" }]
+dependencies = [
+  "fastapi>=0.115",
+  "groq>=0.18",
+  "httpx>=0.28",
+  "openai>=1.65",
+  "pydantic-settings>=2.7",
+  "tenacity>=9.0",
+  "uvicorn[standard]>=0.34",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.25",
+  "pytest-cov>=6.0",
+  "ruff>=0.9",
+]
+
+[project.scripts]
+verdictforge = "verdictforge.main:run"
+
+[tool.setuptools.packages.find]
+include = ["verdictforge*"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers --disable-warnings"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+exclude = ["venv", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+
