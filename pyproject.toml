@@ -11,6 +11,7 @@ requires-python = ">=3.11"
 license = { file = "LICENSE" }
 authors = [{ name = "Sena" }]
 dependencies = [
+  "aiosqlite>=0.21",
   "fastapi>=0.115",
   "groq>=0.18",
   "httpx>=0.28",
@@ -50,4 +51,3 @@ ignore = ["B008"]
 
 [tool.ruff.format]
 quote-style = "double"
-
