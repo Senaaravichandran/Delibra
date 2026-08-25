@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     request_timeout_seconds: float = Field(default=60.0, ge=5.0, le=300.0)
     max_concurrent_models: int = Field(default=4, ge=1, le=16)
     max_question_length: int = Field(default=12_000, ge=100, le=100_000)
+    judge_answer_max_chars: int = Field(default=8_000, ge=1_000, le=50_000)
     cors_origins: list[str] = ["http://localhost:8000", "http://127.0.0.1:8000"]
     api_key: str | None = None
 
@@ -37,6 +38,7 @@ class Settings(BaseSettings):
     groq_model: str = "llama-3.3-70b-versatile"
     nvidia_model: str = "nvidia/llama-3.1-nemotron-nano-8b-v1"
     gpt_oss_model: str = "openai/gpt-oss-20b"
+    judge_model_id: str = "llama-3.3-70b"
 
     @field_validator("cors_origins", mode="before")
     @classmethod
