@@ -4,10 +4,12 @@ import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from verdictforge.api import router
 from verdictforge.arena import DebateEngine
@@ -64,6 +66,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["Content-Type", "X-API-Key", "X-Request-ID"],
     )
     application.include_router(router)
+    web_directory = Path(__file__).parent / "web"
+    application.mount("/", StaticFiles(directory=web_directory, html=True), name="web")
     return application
 
 
@@ -78,4 +82,3 @@ def run() -> None:
 
 if __name__ == "__main__":
     run()
-

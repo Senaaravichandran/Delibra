@@ -35,6 +35,9 @@ verdictforge = "verdictforge.main:run"
 [tool.setuptools.packages.find]
 include = ["verdictforge*"]
 
+[tool.setuptools.package-data]
+verdictforge = ["web/*", "web/assets/*"]
+
 [tool.pytest.ini_options]
 addopts = "-q --strict-markers --disable-warnings"
 asyncio_mode = "auto"

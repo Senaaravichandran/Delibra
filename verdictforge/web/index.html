@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#070a12">
+    <meta name="description" content="VerdictForge — blind, multi-model AI deliberation and evaluation.">
+    <title>VerdictForge — Intelligence, tested in the open</title>
+    <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#arena">Skip to arena</a>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="site-header shell">
+      <a class="brand" href="/" aria-label="VerdictForge home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>Verdict<span>Forge</span></span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#arena">Arena</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#history">History</a>
+        <a class="nav-docs" href="/api/docs">API docs <span aria-hidden="true">↗</span></a>
+      </nav>
+      <button class="status-pill" id="system-status" type="button" aria-label="System status">
+        <span class="status-dot"></span><span>Connecting</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero shell" aria-labelledby="hero-title">
+        <div class="eyebrow"><span>Live model arena</span><i></i> Blind judging <i></i> Persistent Elo</div>
+        <h1 id="hero-title">One question.<br><em>Many minds.</em> One verdict.</h1>
+        <p class="hero-copy">Put leading language models on the same intellectual ground. They reason, deliberate, and face an anonymous, rubric-driven judge.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#arena">Enter the arena <span aria-hidden="true">↓</span></a>
+          <a class="button button-ghost" href="#how-it-works">See how it works</a>
+        </div>
+        <div class="signal" aria-hidden="true">
+          <span class="signal-node signal-a">01</span><i></i>
+          <span class="signal-node signal-b">02</span><i></i>
+          <span class="signal-node signal-c">03</span><i class="signal-pulse"></i>
+          <span class="signal-verdict">VERDICT</span>
+        </div>
+      </section>
+
+      <section class="stat-strip" aria-label="Arena statistics">
+        <div class="shell stats-grid">
+          <div><span id="stat-debates">—</span><small>Debates forged</small></div>
+          <div><span id="stat-completed">—</span><small>Verdicts reached</small></div>
+          <div><span id="stat-duration">—</span><small>Average runtime</small></div>
+          <div><span id="stat-models">—</span><small>Models online</small></div>
+        </div>
+      </section>
+
+      <section class="workspace shell" id="arena" aria-labelledby="arena-title">
+        <div class="section-heading">
+          <div><span class="section-index">01 / ARENA</span><h2 id="arena-title">Forge a verdict</h2></div>
+          <p>Choose your council, set the question, and let the evidence win.</p>
+        </div>
+
+        <div class="workspace-grid">
+          <form class="panel composer" id="debate-form">
+            <div class="panel-label"><span>Question</span><span id="character-count">0 / 12,000</span></div>
+            <textarea id="question" name="question" maxlength="12000" required placeholder="Ask a question worth debating…" aria-describedby="question-hint"></textarea>
+            <div class="prompt-row" id="question-hint">
+              <span>Try</span>
+              <button type="button" data-prompt="Should nuclear energy be central to the global transition away from fossil fuels?">Energy policy</button>
+              <button type="button" data-prompt="Compare event sourcing and CRUD for a financial ledger. When should each architecture be chosen?">System design</button>
+              <button type="button" data-prompt="Explain whether P equals NP and why the answer matters, without assuming advanced mathematics.">Computer science</button>
+            </div>
+
+            <fieldset>
+              <legend>Debate mode</legend>
+              <div class="mode-switch">
+                <label><input type="radio" name="mode" value="deliberate" checked><span><b>Deliberate</b><small>Two rounds · deeper synthesis</small></span></label>
+                <label><input type="radio" name="mode" value="direct"><span><b>Direct</b><small>One round · fastest result</small></span></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Model council <small>Select at least two</small></legend>
+              <div class="model-picker" id="model-picker" aria-live="polite">
+                <div class="model-placeholder"></div><div class="model-placeholder"></div><div class="model-placeholder"></div>
+              </div>
+            </fieldset>
+
+            <div class="form-error" id="form-error" role="alert" hidden></div>
+            <button class="button button-primary forge-button" id="forge-button" type="submit">
+              <span>Forge the verdict</span><i aria-hidden="true">→</i>
+            </button>
+            <p class="privacy-note"><span aria-hidden="true">◇</span> Candidate identities are hidden from the judge.</p>
+          </form>
+
+          <aside class="panel leaderboard" id="leaderboard" aria-labelledby="leaderboard-title">
+            <div class="panel-topline"><div><span class="section-index">LIVE ELO</span><h3 id="leaderboard-title">The standings</h3></div><span class="live-mark">Live</span></div>
+            <div class="leaderboard-list" id="leaderboard-list" aria-live="polite">
+              <div class="rank-placeholder"></div><div class="rank-placeholder"></div><div class="rank-placeholder"></div>
+            </div>
+            <div class="leaderboard-note"><span>How it moves</span><p>Every verdict becomes a set of head-to-head outcomes. Upsets move the table further.</p></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="results shell" id="results" aria-labelledby="results-title" hidden>
+        <div class="section-heading">
+          <div><span class="section-index">02 / VERDICT</span><h2 id="results-title">The judge has spoken</h2></div>
+          <div class="result-actions"><button type="button" id="export-markdown">Export .md</button><button type="button" id="export-json">Export .json</button></div>
+        </div>
+        <div id="result-content" aria-live="polite"></div>
+      </section>
+
+      <section class="process shell" id="how-it-works" aria-labelledby="process-title">
+        <div class="section-heading">
+          <div><span class="section-index">THE METHOD</span><h2 id="process-title">Designed against easy bias</h2></div>
+        </div>
+        <div class="process-grid">
+          <article><span>01</span><h3>Parallel reasoning</h3><p>Every model receives the same question at the same time. A provider failure cannot silence the whole council.</p></article>
+          <article><span>02</span><h3>Peer deliberation</h3><p>In deliberate mode, anonymous drafts become reference material for a second, stronger answer.</p></article>
+          <article><span>03</span><h3>Blind evaluation</h3><p>The judge sees candidate letters, not model brands, and scores a weighted quality rubric.</p></article>
+          <article><span>04</span><h3>Durable evidence</h3><p>Answers, verdicts, timings, and zero-sum ratings persist as an inspectable record.</p></article>
+        </div>
+      </section>
+
+      <section class="history shell" id="history" aria-labelledby="history-title">
+        <div class="section-heading">
+          <div><span class="section-index">03 / ARCHIVE</span><h2 id="history-title">Recent debates</h2></div>
+          <button class="text-button" id="refresh-history" type="button">Refresh ↻</button>
+        </div>
+        <div class="history-list" id="history-list" aria-live="polite"><div class="history-empty">Loading the archive…</div></div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-inner">
+        <div class="brand"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Verdict<span>Forge</span></span></div>
+        <p>Open deliberation for sharper decisions.</p>
+        <div><a href="/api/docs">API</a><a href="https://github.com/Senaaravichandran/Jurex">GitHub</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

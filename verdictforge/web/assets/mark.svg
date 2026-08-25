@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="VerdictForge">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff9b72"/><stop offset="1" stop-color="#ff6b35"/></linearGradient></defs>
+  <rect width="64" height="64" rx="14" fill="#101521"/>
+  <path d="M13 42h9V27h-9zm14 0h10V12H27zm15 0h9V21h-9z" fill="url(#g)" transform="skewX(-7 32 32)"/>
+</svg>
