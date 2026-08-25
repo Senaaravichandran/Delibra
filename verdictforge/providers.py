@@ -14,7 +14,12 @@ from openai import (
     InternalServerError,
     RateLimitError,
 )
-from tenacity import AsyncRetrying, retry_if_exception_type, stop_after_attempt, wait_exponential_jitter
+from tenacity import (
+    AsyncRetrying,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential_jitter,
+)
 
 from verdictforge.catalog import build_model_catalog
 from verdictforge.config import Settings
@@ -97,7 +102,12 @@ class ProviderClient:
                     if json_mode:
                         request["response_format"] = {"type": "json_object"}
                     response = await self._client.chat.completions.create(**request)
-                except (APIConnectionError, APITimeoutError, RateLimitError, InternalServerError) as exc:
+                except (
+                    APIConnectionError,
+                    APITimeoutError,
+                    RateLimitError,
+                    InternalServerError,
+                ) as exc:
                     logger.warning(
                         "Transient %s failure for %s: %s",
                         self.name,
