@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/hero.svg" alt="VerdictForge — Intelligence, tested in the open" width="100%">
+<img src="docs/hero.svg" alt="Delibra — Intelligence, tested in the open" width="100%">
 
 <br>
 
@@ -12,17 +12,17 @@
 
 **A production-minded arena where multiple language models reason in parallel, deliberate over anonymous peer drafts, and face a blind structured judge.**
 
-[Quick start](#-quick-start) · [How it works](#-how-a-verdict-is-forged) · [API](#-api) · [Deploy](#-deployment) · [Contribute](CONTRIBUTING.md)
+[Quick start](#quick-start) · [How it works](#how-delibra-reaches-a-verdict) · [API](#api) · [Deploy](#deployment) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
 ---
 
-## Why VerdictForge?
+## Why Delibra?
 
-One model can sound confident and still be wrong. VerdictForge turns a question into an inspectable competition: independent answers, an optional synthesis round, anonymous evaluation, durable evidence, and ratings that evolve with every result.
+One model can sound confident and still be wrong. Delibra turns a question into an inspectable competition: independent answers, an optional synthesis round, anonymous evaluation, durable evidence, and ratings that evolve with every result.
 
-The name combines **verdict** with **forge**—a place where raw responses are tested under pressure and shaped into stronger decisions.
+The name blends **deliberation** with **libra**, the scales of balance—multiple perspectives weighed carefully before a verdict is reached.
 
 ### What makes it different
 
@@ -35,7 +35,7 @@ The name combines **verdict** with **forge**—a place where raw responses are t
 - **Durable history** — debates, answers, timings, verdicts, and ratings survive restarts in SQLite.
 - **Complete product surface** — responsive frontend, versioned API, exports, OpenAPI, security headers, tests, CI, and Docker.
 
-## How a verdict is forged
+## How Delibra reaches a verdict
 
 ```mermaid
 flowchart LR
@@ -113,7 +113,7 @@ Model routes are environment-driven. Change IDs in `.env` when a provider retire
 ### 3. Run
 
 ```bash
-python -m uvicorn verdictforge.main:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn delibra.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Open [http://localhost:8000](http://localhost:8000). Interactive API documentation is at [http://localhost:8000/api/docs](http://localhost:8000/api/docs).
@@ -146,7 +146,7 @@ curl http://localhost:8000/api/v1/debates/<debate-id>
 | `GET` | `/api/v1/debates/{id}/export` | Download Markdown or JSON evidence |
 | `GET` | `/api/v1/stats` | Leaderboard and arena totals |
 
-If `VERDICTFORGE_API_KEY` is set, include it on creation requests:
+If `DELIBRA_API_KEY` is set, include it on creation requests:
 
 ```bash
 -H "X-API-Key: your-deployment-secret"
@@ -158,22 +158,25 @@ The browser UI reveals an access-key field automatically on protected deployment
 
 | Setting | Default | Notes |
 |---|---:|---|
-| `VERDICTFORGE_ENVIRONMENT` | `development` | Use `production` in deployed environments |
-| `VERDICTFORGE_DATABASE_PATH` | `data/verdictforge.db` | Parent directory is created automatically |
-| `VERDICTFORGE_REQUEST_TIMEOUT_SECONDS` | `60` | Per-provider request ceiling, 5–300 seconds |
-| `VERDICTFORGE_MAX_CONCURRENT_MODELS` | `4` | Process-local concurrency bound |
-| `VERDICTFORGE_MAX_QUESTION_LENGTH` | `12000` | Applied at API and service boundaries |
-| `VERDICTFORGE_RATE_LIMIT_PER_MINUTE` | `10` | Debate creations per client and process |
-| `VERDICTFORGE_API_KEY` | empty | Optional protection for write requests |
-| `VERDICTFORGE_JUDGE_MODEL_ID` | `gpt-oss-120b` | Falls back to the first available model |
-| `VERDICTFORGE_CORS_ORIGINS` | local app origins | Comma-separated exact origins |
+| `DELIBRA_ENVIRONMENT` | `development` | Use `production` in deployed environments |
+| `DELIBRA_DATABASE_PATH` | `data/delibra.db` | Parent directory is created automatically |
+| `DELIBRA_REQUEST_TIMEOUT_SECONDS` | `60` | Per-provider request ceiling, 5–300 seconds |
+| `DELIBRA_MAX_CONCURRENT_MODELS` | `4` | Process-local concurrency bound |
+| `DELIBRA_MAX_QUESTION_LENGTH` | `12000` | Applied at API and service boundaries |
+| `DELIBRA_RATE_LIMIT_PER_MINUTE` | `10` | Debate creations per client and process |
+| `DELIBRA_API_KEY` | empty | Optional protection for write requests |
+| `DELIBRA_JUDGE_MODEL_ID` | `gpt-oss-120b` | Falls back to the first available model |
+| `DELIBRA_CORS_ORIGINS` | local app origins | Comma-separated exact origins |
 
 See [.env.example](.env.example) for the complete configuration surface.
 
 ## Architecture
 
 ```text
-verdictforge/
+delibra/
+└── main.py         # Public ASGI and command-line entry point
+
+verdictforge/       # Stable core-engine namespace
 ├── api.py          # Versioned HTTP routes and export formats
 ├── arena.py        # Concurrent answer and refinement rounds
 ├── catalog.py      # Public model registry and availability
@@ -216,7 +219,7 @@ docker compose up --build -d
 docker compose ps
 ```
 
-The container runs as an unprivileged user, exposes port `8000`, performs an HTTP health check, and stores SQLite state in the `verdictforge-data` volume.
+The container runs as an unprivileged user, exposes port `8000`, performs an HTTP health check, and stores SQLite state in the `delibra-data` volume.
 
 ### Production boundary
 

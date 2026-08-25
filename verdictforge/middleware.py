@@ -15,7 +15,7 @@ from starlette.types import ASGIApp
 
 from verdictforge.config import Settings
 
-logger = logging.getLogger("verdictforge.http")
+logger = logging.getLogger("delibra.http")
 REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9._-]{8,128}$")
 
 

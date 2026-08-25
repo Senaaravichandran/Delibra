@@ -1,4 +1,4 @@
-"""Versioned HTTP API for VerdictForge."""
+"""Versioned HTTP API for Delibra."""
 
 import json
 from uuid import UUID
@@ -86,7 +86,7 @@ async def export_debate(
     debate = await request.app.state.services.repository.get_debate(debate_id)
     if debate is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Debate not found.")
-    filename = f"verdictforge-{debate_id}"
+    filename = f"delibra-{debate_id}"
     if format == "json":
         content = json.dumps(debate.model_dump(mode="json"), indent=2)
         return Response(
@@ -110,7 +110,7 @@ async def stats(request: Request) -> ArenaStats:
 
 def _to_markdown(debate: DebateRecord) -> str:
     lines = [
-        "# VerdictForge Debate",
+        "# Delibra Debate",
         "",
         f"**Question:** {debate.question}",
         f"**Status:** {debate.status.value}",

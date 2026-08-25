@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
+from delibra.main import create_app
 from verdictforge.config import Settings
-from verdictforge.main import create_app
 
 
 def make_settings(tmp_path, *, api_key=None) -> Settings:
@@ -23,7 +23,7 @@ def test_health_and_frontend_are_served(tmp_path) -> None:
     assert health.status_code == 200
     assert health.json()["status"] == "degraded"
     assert health.headers["x-content-type-options"] == "nosniff"
-    assert "VerdictForge" in frontend.text
+    assert "Delibra" in frontend.text
 
 
 def test_unknown_debate_returns_404(tmp_path) -> None:

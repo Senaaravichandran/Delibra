@@ -3,7 +3,7 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "verdictforge"
+name = "delibra"
 version = "2.0.0"
 description = "A production-ready, multi-model AI deliberation and evaluation arena."
 readme = "README.md"
@@ -30,10 +30,11 @@ dev = [
 ]
 
 [project.scripts]
+delibra = "delibra.main:run"
 verdictforge = "verdictforge.main:run"
 
 [tool.setuptools.packages.find]
-include = ["verdictforge*"]
+include = ["delibra*", "verdictforge*"]
 
 [tool.setuptools.package-data]
 verdictforge = ["web/*", "web/assets/*"]

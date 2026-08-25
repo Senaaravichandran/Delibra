@@ -72,7 +72,7 @@ class ProviderClient:
             base_url=base_url,
             timeout=timeout,
             max_retries=0,
-            default_headers={"X-Title": "VerdictForge"},
+            default_headers={"X-Title": "Delibra"},
         )
 
     async def complete(

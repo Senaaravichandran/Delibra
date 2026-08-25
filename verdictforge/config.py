@@ -13,16 +13,16 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        env_prefix="VERDICTFORGE_",
+        env_prefix="DELIBRA_",
         extra="ignore",
         case_sensitive=False,
     )
 
-    app_name: str = "VerdictForge"
+    app_name: str = "Delibra"
     app_version: str = "2.0.0"
     environment: str = "development"
     log_level: str = "INFO"
-    database_path: Path = Path("data/verdictforge.db")
+    database_path: Path = Path("data/delibra.db")
     request_timeout_seconds: float = Field(default=60.0, ge=5.0, le=300.0)
     max_concurrent_models: int = Field(default=4, ge=1, le=16)
     max_question_length: int = Field(default=12_000, ge=100, le=100_000)

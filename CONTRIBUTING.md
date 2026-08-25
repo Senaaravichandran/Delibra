@@ -1,4 +1,4 @@
-# Contributing to VerdictForge
+# Contributing to Delibra
 
 Thank you for helping improve inspectable multi-model reasoning.
 

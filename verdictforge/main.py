@@ -51,7 +51,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         await providers.close()
 
     application = FastAPI(
-        title="VerdictForge API",
+        title="Delibra API",
         summary="Multi-model deliberation, blind judging, and persistent ratings.",
         version=settings.app_version,
         lifespan=lifespan,
@@ -79,7 +79,7 @@ app = create_app()
 def run() -> None:
     """Run the development server from the installed console command."""
 
-    uvicorn.run("verdictforge.main:app", host="0.0.0.0", port=8000, reload=False)
+    uvicorn.run("delibra.main:app", host="0.0.0.0", port=8000, reload=False)
 
 
 if __name__ == "__main__":

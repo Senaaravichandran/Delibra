@@ -13,8 +13,8 @@ Security fixes target the latest commit on `main`.
 ## Deployment checklist
 
 - Store provider credentials in a secret manager or protected environment variables.
-- Set `VERDICTFORGE_API_KEY` on any internet-accessible deployment.
-- Restrict `VERDICTFORGE_CORS_ORIGINS` to exact trusted origins.
+- Set `DELIBRA_API_KEY` on any internet-accessible deployment.
+- Restrict `DELIBRA_CORS_ORIGINS` to exact trusted origins.
 - Terminate TLS at a trusted reverse proxy and forward only known proxy headers.
 - Back up the persistent data volume and restrict filesystem permissions.
 - Place distributed deployments behind a shared rate limiter and durable job queue.

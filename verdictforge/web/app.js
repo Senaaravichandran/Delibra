@@ -25,7 +25,7 @@ function bindEvents() {
 }
 
 async function api(path, options = {}) {
-  const accessKey = sessionStorage.getItem("verdictforge-api-key");
+  const accessKey = sessionStorage.getItem("delibra-api-key");
   const response = await fetch(`/api/v1${path}`, {
     headers: { "Content-Type": "application/json", ...(accessKey ? { "X-API-Key": accessKey } : {}), ...options.headers },
     ...options,
@@ -129,7 +129,7 @@ async function startDebate(event) {
   if (!$("#api-key-field").hidden) {
     const accessKey = $("#api-key").value.trim();
     if (!accessKey) return showFormError("Enter the server access key for this deployment.");
-    sessionStorage.setItem("verdictforge-api-key", accessKey);
+    sessionStorage.setItem("delibra-api-key", accessKey);
   }
   hideFormError();
   setBusy(true);
@@ -254,7 +254,7 @@ function exportCurrent(format) {
 function setBusy(busy) {
   const button = $("#forge-button");
   button.disabled = busy;
-  button.querySelector("span").textContent = busy ? "Forging…" : "Forge the verdict";
+  button.querySelector("span").textContent = busy ? "Deliberating…" : "Begin deliberation";
 }
 function showFormError(message) { const node = $("#form-error"); node.textContent = message; node.hidden = false; }
 function hideFormError() { $("#form-error").hidden = true; }
