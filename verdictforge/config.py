@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     max_concurrent_models: int = Field(default=4, ge=1, le=16)
     max_question_length: int = Field(default=12_000, ge=100, le=100_000)
     judge_answer_max_chars: int = Field(default=8_000, ge=1_000, le=50_000)
+    rate_limit_per_minute: int = Field(default=10, ge=1, le=1_000)
     cors_origins: list[str] = ["http://localhost:8000", "http://127.0.0.1:8000"]
     api_key: str | None = None
 

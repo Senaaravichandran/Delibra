@@ -15,6 +15,7 @@ from verdictforge.api import router
 from verdictforge.arena import DebateEngine
 from verdictforge.config import Settings, get_settings
 from verdictforge.judging import BlindJudge
+from verdictforge.middleware import ProductionMiddleware
 from verdictforge.providers import ProviderRegistry
 from verdictforge.repository import DebateRepository
 from verdictforge.service import DebateService
@@ -65,6 +66,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_methods=["GET", "POST", "OPTIONS"],
         allow_headers=["Content-Type", "X-API-Key", "X-Request-ID"],
     )
+    application.add_middleware(ProductionMiddleware, settings=settings)
     application.include_router(router)
     web_directory = Path(__file__).parent / "web"
     application.mount("/", StaticFiles(directory=web_directory, html=True), name="web")

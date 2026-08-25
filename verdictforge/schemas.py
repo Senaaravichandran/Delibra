@@ -155,4 +155,4 @@ class HealthResponse(StrictModel):
     environment: str
     database: Literal["ok", "unavailable", "not_initialized"]
     available_models: int = Field(ge=0)
-
+    api_key_required: bool = False

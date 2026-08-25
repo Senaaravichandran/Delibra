@@ -25,8 +25,9 @@ function bindEvents() {
 }
 
 async function api(path, options = {}) {
+  const accessKey = sessionStorage.getItem("verdictforge-api-key");
   const response = await fetch(`/api/v1${path}`, {
-    headers: { "Content-Type": "application/json", ...options.headers },
+    headers: { "Content-Type": "application/json", ...(accessKey ? { "X-API-Key": accessKey } : {}), ...options.headers },
     ...options,
   });
   if (!response.ok) {
@@ -47,6 +48,7 @@ async function loadHealth() {
     badge.className = `status-pill ${health.status === "ok" ? "online" : "degraded"}`;
     badge.lastElementChild.textContent = health.status === "ok" ? "Systems ready" : "Needs configuration";
     $("#stat-models").textContent = health.available_models;
+    $("#api-key-field").hidden = !health.api_key_required;
   } catch {
     badge.className = "status-pill degraded";
     badge.lastElementChild.textContent = "Offline";
@@ -124,6 +126,11 @@ async function startDebate(event) {
   const modelIds = [...document.querySelectorAll('input[name="models"]:checked')].map(input => input.value);
   if (question.length < 1) return showFormError("Enter a question for the council.");
   if (modelIds.length < 2) return showFormError("Select at least two available models.");
+  if (!$("#api-key-field").hidden) {
+    const accessKey = $("#api-key").value.trim();
+    if (!accessKey) return showFormError("Enter the server access key for this deployment.");
+    sessionStorage.setItem("verdictforge-api-key", accessKey);
+  }
   hideFormError();
   setBusy(true);
   showProgress("queued");

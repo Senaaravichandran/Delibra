@@ -104,6 +104,7 @@ legend small { float: right; color: var(--dim); text-transform: none; letter-spa
 .forge-button:disabled { cursor: wait; filter: saturate(.25); opacity: .72; }
 .privacy-note { margin: 12px 0 0; color: var(--dim); text-align: center; font-size: 10px; }
 .form-error { margin: -10px 0 15px; padding: 10px 12px; color: #ffc1c7; background: rgba(255,116,129,.08); border: 1px solid rgba(255,116,129,.2); border-radius: 4px; font-size: 12px; }
+.api-key-field { display: grid; grid-template-columns: 130px 1fr; align-items: center; gap: 12px; margin: 0 0 15px; color: var(--muted); font-size: 11px; }.api-key-field input { min-width: 0; padding: 10px 12px; color: white; outline: 0; background: rgba(0,0,0,.2); border: 1px solid var(--line); border-radius: 4px; }.api-key-field input:focus { border-color: rgba(255,107,53,.55); }
 
 .leaderboard { position: sticky; top: 20px; padding: 27px; }
 .panel-topline { display: flex; justify-content: space-between; align-items: start; margin-bottom: 25px; }

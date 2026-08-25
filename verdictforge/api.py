@@ -29,6 +29,7 @@ async def health(request: Request) -> HealthResponse:
         environment=services.settings.environment,
         database="ok" if database_ok else "unavailable",
         available_models=available,
+        api_key_required=bool(services.settings.api_key),
     )
 
 
@@ -126,4 +127,3 @@ def _to_markdown(debate: DebateRecord) -> str:
             )
         lines.extend(["", debate.judgment.reasoning, ""])
     return "\n".join(lines)
-
