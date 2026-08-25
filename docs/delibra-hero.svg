@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
   <title id="title">Delibra</title>
-  <desc id="desc">An animated diagram showing three AI models converging on one blind verdict.</desc>
+  <desc id="desc">Delibra brings multiple AI models together for one blind, structured verdict.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#0f1422"/><stop offset=".55" stop-color="#070a12"/><stop offset="1" stop-color="#11101a"/>

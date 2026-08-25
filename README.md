@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/hero.svg" alt="Delibra — Intelligence, tested in the open" width="100%">
+<img src="docs/delibra-hero.svg?v=2" alt="Delibra — Intelligence, tested in the open" width="100%">
 
 <br>
 
